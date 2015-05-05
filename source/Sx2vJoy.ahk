@@ -1018,10 +1018,11 @@ LoadLibrary() {
    filegetsize, dllsize, %dllpath%
    
    hDLL := DLLCall("LoadLibrary", "Str", dllpath)
+   lasterr := A_LastError
    err := ErrorLevel
    if (!hDLL)
    {
-      errmsg = Sx2vJoy %version%`r`n`r`nCouldn't load vJoyInterface.dll from path %dllpath%`r`n`r`nLoadLibrary error: %err%`r`nSx2vJoy bit architecture: %bitpath%`r`nOS: %A_OSVersion%`r`nOS bit version: x%regview%`nvJoy version: %ver%`r`nvJoyInterface.dll bit version: %dllver%`r`nvJoyInterface.dll size: %dllsize%
+      errmsg = Sx2vJoy %version%`r`n`r`nCouldn't load vJoyInterface.dll from path %dllpath%`r`n`r`nLoadLibrary error: %err%`r`nLast system error: %lasterr%`r`nSx2vJoy bit architecture: %bitpath%`r`nOS: %A_OSVersion%`r`nOS bit version: x%regview%`nvJoy version: %ver%`r`nvJoyInterface.dll bit version: %dllver%`r`nvJoyInterface.dll size: %dllsize%
       msgbox,20,,%errmsg%`n`nCopy error message to clipboard before exiting?
       IfMsgBox, Yes
          clipboard = %errmsg%
