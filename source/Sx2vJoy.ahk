@@ -41,6 +41,7 @@ Icon_1=%In_Dir%\Sx2vJoy.ico
 ; Cmdr Zok - SpaceExplorer
 ; Legendman - SpaceMouse Wireless
 ; MaraKan - SpacePilot Pro
+; Shadys - SpaceMouse Plus (XT) USB
 
 #NoTrayIcon
 #singleinstance off
@@ -56,7 +57,7 @@ if (param1 = "watchdog")
 if (param1 = "watchdog") and (param2 <> "") and (param3 <> "") and (param4 <> "") and (param5 <> "") and (param6 <> "")
    _watchdog(param2,param3,param4,param5,param6)
 
-version := "1.2 build 5 test 4"
+version := "1.2 build 5 test 5"
 
 Menu, Tray, nostandard
 Menu, Tray, add, Open Configuration GUI, gui
@@ -98,6 +99,7 @@ aDevices[13,0] := "1133,50694", aDevices[13,1] := "SpaceMouse Classic USB"
 aDevices[14,0] := "1133,50693", aDevices[14,1] := "CadMan"
 aDevices[15,0] := "1133,50691", aDevices[15,1] := "SpaceMouse Plus (XT) USB" ; same IDs for two devices
 aDevices[0,0] := 15
+
 AHKHID_UseConstants()
 3dcIndexes := _3DCDevices()
 ; ---------- out of neccessity ----------
@@ -141,7 +143,7 @@ OnExit, AppQuit
 ; ---------- vJoy init ----------
 
 ; ---------- 3DConnexion init ----------
-btnsSN := btnsSE := btnsSM := btnsSB := btnsSP := btnsSMW := btnsSPP := object()
+btnsSN := btnsSE := btnsSM := btnsSB := btnsSP := btnsSMW := btnsSPP := btnsSMP := object()
 PID := DllCall("GetCurrentProcessId")
 ;Gui, +LastFound ;Create GUI to receive messages
 ;hGui := WinExist()
@@ -354,8 +356,9 @@ InputMsg9583(wParam, lParam) {
 }
 
 _buttonsPerPID(PID, byte0) {
-   global buttonlog, vJoyButtons, vjoy_id, btnsSN, btnsSM, btnsSE, btnsSB, btnsSP, btnsSMW, btnsSPP
+   global buttonlog, vJoyButtons, vjoy_id, btnsSN, btnsSM, btnsSE, btnsSB, btnsSP, btnsSMW, btnsSPP, btnsSMP
    
+   (PID = 50691) ? pointer := "btnsSMP" ; SpaceMouse Plus (XT) USB
    (PID = 50721) ? pointer := "btnsSB"  ; SpaceBall 5000 (USB)
    (PID = 50725) ? pointer := "btnsSP"  ; SpacePilot (non-Pro)
    (PID = 50726) ? pointer := "btnsSN"  ; SpaceNavigator
@@ -448,7 +451,7 @@ _getRAWdevices() {
 }
 
 Kbd_SetBtn(state,pointer,index) {
-   global btnsSN, btnsSM, btnsSE, btnsSB, btnsSP, btnsSMW, btnsSPP
+   global btnsSN, btnsSM, btnsSE, btnsSB, btnsSP, btnsSMW, btnsSPP, btnsSMP
 
    down := %pointer%[index,2]
    up := %pointer%[index,3]
@@ -687,7 +690,7 @@ _readAxesOrder(profile) {
 }
 
 _readBtnConfig(profile) {
-   global btnsSB, btnsSE, btnsSM, btnsSN, btnsSP, btnsSMW, btnsSPP
+   global btnsSB, btnsSE, btnsSM, btnsSN, btnsSP, btnsSMW, btnsSPP, btnsSMP
    btnsSB := _BtnConfig2Array(profile, "SpaceBall 5000 (USB)")
    btnsSE := _BtnConfig2Array(profile, "SpaceExplorer")
    btnsSM := _BtnConfig2Array(profile, "SpaceMouse Pro")
@@ -695,7 +698,8 @@ _readBtnConfig(profile) {
    btnsSP := _BtnConfig2Array(profile, "SpacePilot")
    btnsSMW := _BtnConfig2Array(profile, "SpaceMouse Wireless")
    btnsSPP := _BtnConfig2Array(profile, "SpacePilot Pro")
-   ;printarray(btnsSB)
+   btnsSMP := _BtnConfig2Array(profile, "SpaceMouse Plus (XT) USB")
+   printarray(btnsSMP) ; comment out
 }
 
 _BtnConfig2Array(profile, device) {
