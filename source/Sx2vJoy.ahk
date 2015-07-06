@@ -699,7 +699,7 @@ _readBtnConfig(profile) {
    btnsSMW := _BtnConfig2Array(profile, "SpaceMouse Wireless")
    btnsSPP := _BtnConfig2Array(profile, "SpacePilot Pro")
    btnsSMP := _BtnConfig2Array(profile, "SpaceMouse Plus (XT) USB")
-   printarray(btnsSMP) ; comment out
+   ;printarray(btnsSMP) ; comment out
 }
 
 _BtnConfig2Array(profile, device) {
