@@ -8,9 +8,9 @@ Created_Date=1
 Execution_Level=4
 [VERSION]
 Set_Version_Info=1
-File_Version=1.2.5.4
+File_Version=1.2.5.6
 Inc_File_Version=0
-Product_Version=1.1.21.3
+Product_Version=1.1.22.9
 Set_AHK_Version=1
 [ICONS]
 Icon_1=%In_Dir%\Sx2vJoy.ico
@@ -50,14 +50,11 @@ param1 := param2 := param3 := param4 := param5 := param6 := ""
 loop, %0%
    param%A_Index% := %A_Index%
 
-if (param1 = "watchdog")
-   ;msgbox watchdog`n`n%param1%`n%param2%`n%param3%`n%param4%`n%param5%`n%param6%
-
 ; param1 = keyword; param2 = vJoy ID; param3 = vendor ID; param4 = product ID; param5 = exe to restart; param6 = PID to monitor
 if (param1 = "watchdog") and (param2 <> "") and (param3 <> "") and (param4 <> "") and (param5 <> "") and (param6 <> "")
    _watchdog(param2,param3,param4,param5,param6)
 
-version := "1.2 build 5 test 5"
+version := "1.2 build 5 test 6"
 
 Menu, Tray, nostandard
 Menu, Tray, add, Open Configuration GUI, gui
@@ -134,8 +131,8 @@ if (vjoy_id = "") or (function = "") or (productID = "")
    productID := sxmodi3
 }
 ;msgbox vjoy_id %vjoy_id%`nfunction %function%
-
 InitVJoy(vjoy_id) ; Whether the vjoy_id is connected and under the app's control
+;msgbox, here
 vJoyButtons := DllCall("vJoyInterface\GetVJDButtonNumber", "Int", vjoy_id)
 _checkvJoyAxes()
 VJOY_SetAxes(50, 50, 50, 50, 50, 50)
@@ -207,6 +204,7 @@ source := A_ScriptFullPath
 PID := DllCall("GetCurrentProcessId")
 dest := A_Temp . "\" . scriptname . " watchdog " . PID . ".exe"
 filecopy, %source%, %dest%, 1
+;msgbox, pause
 stringsplit, wdexename, dest, "\"
 wdexename := wdexename%wdexename0%
 
@@ -483,11 +481,13 @@ VJOY_SetAxes(SNavX, SNavY, SNavZ, SNavRX, SNavRY, SNavRZ) {
       ret := DllCall("vJoyInterface\SetAxis", "Int", 327.68 * axval, "UInt", vjoy_id, "UInt", HID_USAGE_%ax_sx%)
       if (!ret) {
          reconnectattempts++
+         _filewritelog("error.log", "connection to vJoy lost, trying to reconnect")
          _reconnect()
          if (reconnectattempts > 3)
          {
             axis_val := 327.68 * SNav%ax_sx%
             usage := HID_USAGE_%ax_sx%
+            _filewritelog("error.log", "restoring connection to vJoy failed")
             msgbox,16,Sx2vJoy %version%,VJOY_SetAxes`n`naxis: %ax_sx%`nusage: %usage%`naxis value: %axis_val%`nErrorLevel: %ErrorLevel%`nReturned: %ret%`n`nExiting.
             exitapp
          }
@@ -620,11 +620,13 @@ _process_throttle(axis, axis_phys, method) {
       ret := DllCall("vJoyInterface\SetAxis", "Int", 327.68 * axis_virt, "UInt", vjoy_id, "UInt", HID_USAGE_%ax%)
       if (!ret) {
          reconnectattempts++
+         _filewritelog("error.log", "connection to vJoy lost, trying to reconnect")
          _reconnect()
          if (reconnectattempts > 3)
          {
             axis_val := 327.68 * axis_virt
             usage := HID_USAGE_%ax%
+            _filewritelog("error.log", "restoring connection to vJoy failed")
             msgbox,16,Sx2vJoy %version%,_Process_Throttle`n`naxis: %ax%`nusage: %usage%`naxis value: %axis_val%`nErrorLevel: %ErrorLevel%`nReturned: %ret%`n`nExiting.
             exitapp
          }
@@ -962,6 +964,7 @@ _logSens(value) {
    return value
 }
 
+/*
 InitVJoy(vjoy_id) {
    global version
    if (vjoy_id <> 0) and (vjoy_id <> "")
@@ -985,6 +988,37 @@ InitVJoy(vjoy_id) {
       DllCall("vJoyInterface\ResetVJD", "UInt", vjoy_id)
       return 1
    }
+}
+*/
+
+InitVJoy(vjoy_id) {
+	global version
+   
+	if (vjoy_id <> 0) and (vjoy_id <> "") {
+		DllCall("vJoyInterface\vJoyEnabled") ; for some strange reason this is necessary on some systems so GetVJDStatus doesn't crash every other call
+		vjoy_status := DllCall("vJoyInterface\GetVJDStatus", "UInt", vjoy_id)
+		
+		; 0 = owned by this feeder
+		; 1 = free
+		; 2 = owned by another feeder
+		; 3 = missing
+		; 4 = unknown error
+		
+		if (vjoy_status <> 1) {
+			msgbox,48,Sx2vJoy %version%,Sx2vJoy already has control of vJoy ID %vjoy_id%.
+			;} else if (vjoy_status = 1) { ; this is what we ideally have, so no need to bug the user about it
+			;   msgbox,,Sx2vJoy %version%,No feeder already has control of vJoy ID %vjoy_id%.
+			} else if (vjoy_status = 2) {
+			msgbox,48,Sx2vJoy %version%,Another feeder already has control of vJoy ID %vjoy_id%.
+			}  else if (vjoy_status >= 3) {
+			msgbox,48,Sx2vJoy %version%,vJoy device ID %vjoy_id% does not exist or driver is down.
+			}  else if (vjoy_status >= 4) {
+			msgbox,48,Sx2vJoy %version%,Unknown. Sorry.
+            exitapp
+		}
+		DllCall("vJoyInterface\AcquireVJD", "UInt", vjoy_id)
+        return 1
+	}
 }
 
 LoadLibrary() {
@@ -1117,6 +1151,8 @@ _setupblind(mode, x, y, z, xR=0, yR=0, zR=0) {
 _vjoy_sticks() {
    global version
    sticks := ""
+   
+   DllCall("vJoyInterface\vJoyEnabled") ; for some strange reason this is necessary on some systems so GetVJDStatus doesn't crash every other call
    loop, 16
    {
       if (DllCall("vJoyInterface\GetVJDStatus", "UInt", A_Index) = 1)
@@ -1395,8 +1431,9 @@ _activeWinCheck() {
 }
 
 _vJoy_Close() {
-   DllCall("vJoyInterface\RelinquishVJD", "UInt", vjoy_id)
+   global vjoy_id
    DllCall("vJoyInterface\ResetVJD", "UInt", vjoy_id)
+   DllCall("vJoyInterface\RelinquishVJD", "UInt", vjoy_id)
 }
 
 ;By Laszlo, adapted by TheGood
@@ -1593,6 +1630,20 @@ FileGetVersionInfo_AW( peFile="", StringFileInfo="", Delimiter="|") {    ; Writt
    Return Info
 }
 
+_fileWriteLog(sLogPath, sLogMsg) {
+	sDateNow := A_YEAR . "-" . A_MON . "-" . A_MDAY
+	sTimeNow := A_HOUR . ":" . A_MIN . ":" . A_SEC
+	sMsg := sDateNow . " " . sTimeNow . " : " . sLogMsg
+
+	FileRead, out, %sLogPath%
+	if (errorlevel = 0)
+		sMsg = %sMsg%`r`n%out%
+
+	file := FileOpen(sLogPath, 1)
+	File.Write(sMsg)
+	File.Close()
+}
+
 GuiClose:
 errorlog = %A_ScriptDir%\error.log
 content = %A_Year%-%A_Mon%-%A_MDay% %A_Hour%:%A_Min%:%A_Sec%`tthis should not have happened
@@ -1602,6 +1653,7 @@ ExitApp
 return
 
 AppQuit:
+OnExit
 trayTip, Sx2vJoy v%version%, Closing...
 regwrite, REG_DWORD, HKCU, SOFTWARE\Microsoft\Windows\Windows Error Reporting\, DontShowUI, 0
 DllCall("Shell32\SHChangeNotifyDeregister", UInt,SHCNR_ID)
