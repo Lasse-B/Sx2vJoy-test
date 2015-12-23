@@ -8,7 +8,7 @@ Created_Date=1
 Execution_Level=4
 [VERSION]
 Set_Version_Info=1
-File_Version=1.2.5.6
+File_Version=1.2.5.7
 Inc_File_Version=0
 Product_Version=1.1.22.9
 Set_AHK_Version=1
@@ -54,7 +54,7 @@ loop, %0%
 if (param1 = "watchdog") and (param2 <> "") and (param3 <> "") and (param4 <> "") and (param5 <> "") and (param6 <> "")
    _watchdog(param2,param3,param4,param5,param6)
 
-version := "1.2 build 5 test 6"
+version := "1.2 build 5 test 7"
 
 Menu, Tray, nostandard
 Menu, Tray, add, Open Configuration GUI, gui
@@ -163,10 +163,10 @@ currentProfile := "", MsgExe := "", oldMsgExe := "", oldActiveID, oldExe, displa
 Controller_settings := object()
 forcemode = 0, lastGUIprofile = "", showIfActive = 0
 
-hotkey, ~^!a, label_displayaxesinput
-hotkey, ~^!s, label_setaxis
-hotkey, ~^!d, label_setaxisblind
-hotkey, ~^!b, label_buttonlog
+hotkey, ~^!vk41, label_displayaxesinput ; Ctrl+Alt+A
+hotkey, ~^!vk53, label_setaxis ; Ctrl+Alt+S
+hotkey, ~^!vk44, label_setaxisblind ; Ctrl+Alt+D
+hotkey, ~^!vk42, label_buttonlog ; Ctrl+Alt+B
 hotkey, ~wheeldown, label_down
 hotkey, ~wheelup, label_up
 hotkey, ~mbutton, label_zero
@@ -1222,7 +1222,7 @@ _setupControls(vJoys, 3dcIndexes) {
    gui, name:add, dropdownlist, x185 y37 w180 vvJoy_device, %vJoy_list%
    gui, name:add, button, x145 y70 w80 Default gnamebtn, OK
    gui, name:show, AutoSize Center
-
+   
    Loop
    {
       sleep, 10
@@ -1239,6 +1239,11 @@ _setupControls(vJoys, 3dcIndexes) {
    namebtn:
    gui, submit, nohide
    gui, destroy
+   return
+   
+   nameGuiClose:
+   nameGuiEscape:
+   ExitApp
    return
 }
 
@@ -1643,14 +1648,6 @@ _fileWriteLog(sLogPath, sLogMsg) {
 	File.Write(sMsg)
 	File.Close()
 }
-
-GuiClose:
-errorlog = %A_ScriptDir%\error.log
-content = %A_Year%-%A_Mon%-%A_MDay% %A_Hour%:%A_Min%:%A_Sec%`tthis should not have happened
-fileappend, %content%, %errorlog%
-;gosub, AppQuit
-ExitApp
-return
 
 AppQuit:
 OnExit
