@@ -8,7 +8,7 @@ Created_Date=1
 Execution_Level=4
 [VERSION]
 Set_Version_Info=1
-File_Version=1.2.5.7
+File_Version=1.2.5.8
 Inc_File_Version=0
 Product_Version=1.1.22.9
 Set_AHK_Version=1
@@ -54,7 +54,7 @@ loop, %0%
 if (param1 = "watchdog") and (param2 <> "") and (param3 <> "") and (param4 <> "") and (param5 <> "") and (param6 <> "")
    _watchdog(param2,param3,param4,param5,param6)
 
-version := "1.2 build 5 test 7"
+version := "1.2 build 5 test 8"
 
 Menu, Tray, nostandard
 Menu, Tray, add, Open Configuration GUI, gui
@@ -369,7 +369,7 @@ _buttonsPerPID(PID, byte0) {
    ;printarray(%pointer%)
    
    if (buttonlog = 1)
-      _logButton(byte0, device)
+      _logButton(byte0, PID)
    else
    {
       loops := %pointer%[0,0]
