@@ -1,7 +1,7 @@
 TESTED WITH vJoy VERSION 2.1.6
 
 v1.2 build 5 test 9
-- added SpaceNavigator for Notebooks support (experimental until confirmed working)
+- added SpaceNavigator for Notebooks support
 
 
 v1.2 build 5 test 8
