@@ -1000,7 +1000,7 @@ InitVJoy(vjoy_id) {
 	global version
    
 	if (vjoy_id <> 0) and (vjoy_id <> "") {
-		;DllCall("vJoyInterface\vJoyEnabled") ; for some strange reason this is necessary on some systems so GetVJDStatus doesn't crash every other call
+		DllCall("vJoyInterface\vJoyEnabled") ; for some strange reason this is necessary on some systems so GetVJDStatus doesn't crash every other call
 		vjoy_status := DllCall("vJoyInterface\GetVJDStatus", "UInt", vjoy_id)
 		
 		; 0 = owned by this feeder
@@ -1172,7 +1172,7 @@ _vjoy_sticks() {
    
    loop, 16
    {
-      ;DllCall("vJoyInterface\vJoyEnabled") ; for some strange reason this is necessary on some systems so GetVJDStatus doesn't crash every other call
+      DllCall("vJoyInterface\vJoyEnabled") ; for some strange reason this is necessary on some systems so GetVJDStatus doesn't crash every other call
       vjoy_num := DllCall("vJoyInterface\GetVJDStatus", "UInt", A_Index)
       if (vjoy_num = 1)
       {
