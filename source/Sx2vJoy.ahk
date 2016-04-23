@@ -8,7 +8,7 @@ Created_Date=1
 Execution_Level=4
 [VERSION]
 Set_Version_Info=1
-File_Version=1.2.5.9
+File_Version=1.2.5.10
 Inc_File_Version=0
 Product_Version=1.1.22.9
 Set_AHK_Version=1
@@ -54,7 +54,7 @@ loop, %0%
 if (param1 = "watchdog") and (param2 <> "") and (param3 <> "") and (param4 <> "") and (param5 <> "") and (param6 <> "")
    _watchdog(param2,param3,param4,param5,param6)
 
-version := "1.2 build 5 test 9"
+version := "1.2 build 5 test 11"
 
 Menu, Tray, nostandard
 Menu, Tray, add, Open Configuration GUI, gui
@@ -71,13 +71,18 @@ coordmode, tooltip, screen
 #MaxHotkeysPerInterval 1000
 
 SpaceBallSwap := 0
-if fileexist(A_Scriptdir . "\swap.txt")
+if fileexist(A_Scriptdir "\swap.txt")
    SpaceBallSwap := 1
 
 
 smoothing := 99.9 ; currently without effect
 
 ; ---------- out of neccessity ----------
+if not fileexist(A_ScriptDir "\config.ini")
+{
+   msgbox,16,Sx2vJoy %version%,config.ini not found. Make sure it's in the same directory as Sx2vJoy.exe.`n`nExiting.
+   ExitApp
+}
 DllCall("kernel32.dll\SetProcessShutdownParameters", UInt, 0x4FF, UInt, 0)
 aDevices := object()
 aDevices[1,0] := "9583,50738", aDevices[1,1] := "SpaceMouse Pro Wireless"
@@ -660,9 +665,7 @@ MoveAxis(ax) {
 _readAxesOrder(profile) {
    global axis_list_vjoy
    tempaxes := ""
-   
    iniread, axes, config.ini, %profile%, axes order, "x,y,z,xR,yR,zR"
-      
    stringreplace, axes, axes, %A_Space%,,All
    stringupper, axes, axes
    
@@ -997,7 +1000,7 @@ InitVJoy(vjoy_id) {
 	global version
    
 	if (vjoy_id <> 0) and (vjoy_id <> "") {
-		DllCall("vJoyInterface\vJoyEnabled") ; for some strange reason this is necessary on some systems so GetVJDStatus doesn't crash every other call
+		;DllCall("vJoyInterface\vJoyEnabled") ; for some strange reason this is necessary on some systems so GetVJDStatus doesn't crash every other call
 		vjoy_status := DllCall("vJoyInterface\GetVJDStatus", "UInt", vjoy_id)
 		
 		; 0 = owned by this feeder
@@ -1041,6 +1044,7 @@ LoadLibrary() {
       _vJoyInfo(2)
    
    dllver_tmp := FileGetVersionInfo_AW(dllpath, "ProductVersion")
+   
    dllver := 0
    if instr(dllver_tmp, "amd64") > 0
       dllver := "x64"
@@ -1057,7 +1061,7 @@ LoadLibrary() {
    
    filegetsize, dllsize, %dllpath%
    
-   hDLL := DLLCall("LoadLibrary", "Str", dllpath)
+   hDLL := DLLCall("LoadLibrary", "Str", dllpath, "Ptr")
    lasterr := A_LastError
    err := ErrorLevel
    if (!hDLL)
@@ -1068,6 +1072,18 @@ LoadLibrary() {
          clipboard = %errmsg%
       ExitApp
    }
+
+   VarSetCapacity(Dll_Ver_tmp, 16, 0)
+   VarSetCapacity(Drv_Ver_tmp, 16, 0)
+   DriverMatch := DllCall("vJoyInterface\DriverMatch", "UInt*", Dll_Ver_tmp, "UInt*", Drv_Ver_tmp)
+   Dll_Ver := numget(Dll_Ver_tmp)
+   Drv_Ver := numget(Drv_Ver_tmp)
+   
+   if (DriverMatch <> 1) {
+      msgbox,16,Sx2vJoy %version%,vJoy driver version does not match vJoyInterface.dll version.`n`nExiting.
+      ExitApp
+   }
+   
    return hDLL
 }
 
@@ -1151,13 +1167,14 @@ _setupblind(mode, x, y, z, xR=0, yR=0, zR=0) {
 }
 
 _vjoy_sticks() {
-   global version
+   global version, hDLL
    sticks := ""
    
-   DllCall("vJoyInterface\vJoyEnabled") ; for some strange reason this is necessary on some systems so GetVJDStatus doesn't crash every other call
    loop, 16
    {
-      if (DllCall("vJoyInterface\GetVJDStatus", "UInt", A_Index) = 1)
+      ;DllCall("vJoyInterface\vJoyEnabled") ; for some strange reason this is necessary on some systems so GetVJDStatus doesn't crash every other call
+      vjoy_num := DllCall("vJoyInterface\GetVJDStatus", "UInt", A_Index)
+      if (vjoy_num = 1)
       {
          sticks .= A_Index . "|"
       }
@@ -1651,10 +1668,75 @@ _fileWriteLog(sLogPath, sLogMsg) {
 	File.Close()
 }
 
+; ------------------------------------------------------------------------------
+; Function .....: FileVerInfo
+; Description ..: Return Version Information for the selected file
+; Parameters ...: sFile      - Path to the file
+; ..............: sVerString - Pipe-separated list of the properties to retrieve
+; ..............:              If empty, all properties will be retrieved
+; Return .......: String with properties on success, 0 on error
+; AHK Version ..: AutoHotkey 1.0.48.5
+; Author .......: Cyruz - http://ciroprincipe.info
+; License ......: WTFPL - http://www.wtfpl.net/txt/copying/
+; Changelog ....: Nov. 17, 2012 - ver 0.1 - First revision
+; ------------------------------------------------------------------------------
+FileVerInfo(sFile, sVerString="") {
+    
+    sVerString := (sVerString) ? sVerString : "Comments|CompanyName|FileDescription|FileVersion|InternalName|LegalCopyright|LegalTrademarks|OriginalFilename|ProductName|ProductVersion|PrivateBuild|SpecialBuild"
+
+    If (! nSize := DllCall( "Version.dll\GetFileVersionInfoSizeA"
+                          ,  Str,  sFile
+                          ,  UInt, 0 ))
+        Return 0
+
+    VarSetCapacity(cBuf, nSize)
+    If (! DllCall( "Version.dll\GetFileVersionInfoA"
+                 ,  Str,  sFile
+                 ,  UInt, 0
+                 ,  UInt, nSize
+                 ,  UInt, &cBuf ))
+        Return 0
+
+    If (! DllCall( "Version.dll\VerQueryValueA"
+                 ,  UInt,  &cBuf
+                 ,  Str,   "\\VarFileInfo\\Translation"
+                 ,  UIntP, pAddrVerBuf
+                 ,  UIntP, nVerBufSize ))
+        Return 0
+        
+    VarSetCapacity(sLangCodePg, 8)
+    DllCall( "msvcrt\sprintf"
+           ,  Str,   sLangCodePg
+           ,  Str,   "%04X%04X"
+           ,  Short, NumGet(pAddrVerBuf+0, 0, "Short")
+           ,  Short, NumGet(pAddrVerBuf+0, 2, "Short") )
+
+    StringSplit, sVerString, sVerString, |    
+    Loop, %sVerString0%
+    {
+        DllCall( "Version.dll\VerQueryValueA"
+               ,  UChar, &cBuf
+               ,  Str,   "\\StringFileInfo\\" . sLangCodePg . "\\" . sVerString%A_Index%
+               ,  UIntP, pAddrVerBuf
+               ,  UIntP, nVerBufSize )
+
+        VarSetCapacity(cVerBuf, nVerBufSize)
+        DllCall( "Kernel32.dll\lstrcpyn"
+               ,  Str,  cVerBuf
+               ,  UInt, pAddrVerBuf
+               ,  Int,  nVerBufSize )
+        
+        RetString .= sVerString%A_Index% . "|" . cVerBuf . "|"
+    }
+
+    Return SubStr(RetString, 1, -1)
+}
+
 AppQuit:
 OnExit
 trayTip, Sx2vJoy v%version%, Closing...
-regwrite, REG_DWORD, HKCU, SOFTWARE\Microsoft\Windows\Windows Error Reporting\, DontShowUI, 0
+;regwrite, REG_DWORD, HKCU, SOFTWARE\Microsoft\Windows\Windows Error Reporting\, DontShowUI, 0
+AHKHID_Register(1,8,0,RIDEV_REMOVE)
 DllCall("Shell32\SHChangeNotifyDeregister", UInt,SHCNR_ID)
 if (vjoy_id <> 0) and (vjoy_id <> "")
    _VJoy_Close()

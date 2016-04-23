@@ -21,7 +21,7 @@
 _GDIPlus_Startup()
 
 Global $inisection = "default"
-Global $version = "v1.2 build 6"
+Global $version = "v1.2 build 7"
 
 $Form1 = GUICreate("Sx2vJoy Config GUI " & $version, 738, 758)
 $width = 130
@@ -89,16 +89,21 @@ Dim $start[1][2] = [[8, 8]]
 _GUICtrlCreateGroupEx("Profiles ", $start[0][0], $start[0][1], 380, 207, 0xA9A9A9)
 $aProfileIDs[0] = GUICtrlCreateButton("i", $start[0][0] + 365, $start[0][1] + 4, $InfoWidth, $InfoHeight)
 $aProfiles = IniReadSectionNames(@ScriptDir & "\config.ini")
+If Not IsArray($aProfiles) Then
+	MsgBox(16, "Error", "No section names found in config.ini. Cannot continue.")
+	Exit
+EndIf
 $search = _ArraySearch($aProfiles, "general", 1, 0, 0, 2)
 _ArrayDelete($aProfiles, $search)
-
 _ArrayInsert($aProfiles, 1, "default")
 $aProfiles = _ArrayUnique($aProfiles, 0, 0, 0, 0)
 _ArraySort($aProfiles, 0, 2)
+$aProfiles[0] = UBound($aProfiles) - 1
+
 GUICtrlCreateGroup("Currently Selected Profile:", $start[0][0] + 10, 25, 365, 150)
 GUICtrlSetFont(-1, 9, 600)
 $profileslist = ""
-$aProfiles[0] = UBound($aProfiles) - 1
+
 For $i = 1 To $aProfiles[0]
 	$profileslist &= $aProfiles[$i] & "|"
 Next
@@ -186,7 +191,7 @@ For $i = 0 To UBound($aAxes) - 1
 	EndIf
 Next
 If $found <> 6 Then Dim $aAxes[6] = ["x", "y", "z", "Rx", "Ry", "Rz"]
-dim $aAxesLabelIDs[6]
+Dim $aAxesLabelIDs[6]
 For $i = 0 To 5
 	ReDim $aAxesIDs[UBound($aAxesIDs) + 1]
 	If $i > 2 Then $xcorr = -3
@@ -1637,7 +1642,7 @@ Func _readconfig($new = 0)
 				If $swapRotTrans = 0 Then
 
 					For $i = 1 To 6
-						guictrlsetdata($aAxesLabelIDs[$i-1], $aLabelsvJ[$i-1])
+						GUICtrlSetData($aAxesLabelIDs[$i - 1], $aLabelsvJ[$i - 1])
 						If $split[$i] = "xR" Then $split[$i] = "Rx"
 						If $split[$i] = "yR" Then $split[$i] = "Ry"
 						If $split[$i] = "zR" Then $split[$i] = "Rz"
@@ -1645,14 +1650,14 @@ Func _readconfig($new = 0)
 					Next
 				Else
 					For $i = 4 To 6
-						guictrlsetdata($aAxesLabelIDs[$i-4], $aLabelsvJ[$i-1])
+						GUICtrlSetData($aAxesLabelIDs[$i - 4], $aLabelsvJ[$i - 1])
 						If $split[$i] = "xR" Then $split[$i] = "Rx"
 						If $split[$i] = "yR" Then $split[$i] = "Ry"
 						If $split[$i] = "zR" Then $split[$i] = "Rz"
 						_GUICtrlComboBox_SetCurSel($aAxesIDs[$i - 3], _GUICtrlComboBox_FindStringExact($aAxesIDs[$i - 3], $split[$i]))
 					Next
 					For $i = 1 To 3
-						guictrlsetdata($aAxesLabelIDs[$i+2], $aLabelsvJ[$i-1])
+						GUICtrlSetData($aAxesLabelIDs[$i + 2], $aLabelsvJ[$i - 1])
 						If $split[$i] = "xR" Then $split[$i] = "Rx"
 						If $split[$i] = "yR" Then $split[$i] = "Ry"
 						If $split[$i] = "zR" Then $split[$i] = "Rz"
