@@ -8,7 +8,7 @@ Created_Date=1
 Execution_Level=4
 [VERSION]
 Set_Version_Info=1
-File_Version=1.2.5.10
+File_Version=1.2.5.11
 Inc_File_Version=0
 Product_Version=1.1.22.9
 Set_AHK_Version=1
