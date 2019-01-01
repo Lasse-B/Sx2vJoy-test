@@ -42,6 +42,7 @@ Icon_1=%In_Dir%\Sx2vJoy.ico
 ; Legendman - SpaceMouse Wireless
 ; MaraKan - SpacePilot Pro
 ; Shadys - SpaceMouse Plus (XT) USB
+; ChrisPHL - SpaceMouse Compact (3DX-600053)
 
 #NoTrayIcon
 #singleinstance off
@@ -85,22 +86,23 @@ if not fileexist(A_ScriptDir "\config.ini")
 }
 DllCall("kernel32.dll\SetProcessShutdownParameters", UInt, 0x4FF, UInt, 0)
 aDevices := object()
-aDevices[1,0] := "9583,50738", aDevices[1,1] := "SpaceMouse Pro Wireless"
-aDevices[2,0] := "9583,50737", aDevices[2,1] := "SpaceMouse Pro Wireless"
-aDevices[3,0] := "9583,50735", aDevices[3,1] := "SpaceMouse Wireless"
-aDevices[4,0] := "9583,50734", aDevices[4,1] := "SpaceMouse Wireless"
-aDevices[5,0] := "1133,50731", aDevices[5,1] := "SpaceMouse Pro"
-aDevices[6,0] := "1133,50729", aDevices[6,1] := "SpacePilot Pro"
-aDevices[7,0] := "1133,50728", aDevices[7,1] := "SpaceNavigator for Notebooks"
-aDevices[8,0] := "1133,50727", aDevices[8,1] := "SpaceExplorer"
-aDevices[9,0] := "1133,50726", aDevices[9,1] := "SpaceNavigator"
-aDevices[10,0] := "1133,50725", aDevices[10,1] := "SpacePilot"
-aDevices[11,0] := "1133,50723", aDevices[11,1] := "SpaceTraveler"
-aDevices[12,0] := "1133,50721", aDevices[12,1] := "SpaceBall 5000 USB"
-aDevices[13,0] := "1133,50694", aDevices[13,1] := "SpaceMouse Classic USB"
-aDevices[14,0] := "1133,50693", aDevices[14,1] := "CadMan"
-aDevices[15,0] := "1133,50691", aDevices[15,1] := "SpaceMouse Plus (XT) USB" ; same IDs for two devices
-aDevices[0,0] := 15
+aDevices[1,0] := "9583,50741", aDevices[1,1] := "SpaceMouse Compact (3DX-600053)" ; REV_0437
+aDevices[2,0] := "9583,50738", aDevices[2,1] := "SpaceMouse Pro Wireless"
+aDevices[3,0] := "9583,50737", aDevices[3,1] := "SpaceMouse Pro Wireless"
+aDevices[4,0] := "9583,50735", aDevices[4,1] := "SpaceMouse Wireless"
+aDevices[5,0] := "9583,50734", aDevices[5,1] := "SpaceMouse Wireless"
+aDevices[6,0] := "1133,50731", aDevices[6,1] := "SpaceMouse Pro"
+aDevices[7,0] := "1133,50729", aDevices[7,1] := "SpacePilot Pro"
+aDevices[8,0] := "1133,50728", aDevices[8,1] := "SpaceNavigator for Notebooks"
+aDevices[9,0] := "1133,50727", aDevices[9,1] := "SpaceExplorer"
+aDevices[10,0] := "1133,50726", aDevices[10,1] := "SpaceNavigator"
+aDevices[11,0] := "1133,50725", aDevices[11,1] := "SpacePilot"
+aDevices[12,0] := "1133,50723", aDevices[12,1] := "SpaceTraveler"
+aDevices[13,0] := "1133,50721", aDevices[13,1] := "SpaceBall 5000 USB"
+aDevices[14,0] := "1133,50694", aDevices[14,1] := "SpaceMouse Classic USB"
+aDevices[15,0] := "1133,50693", aDevices[15,1] := "CadMan"
+aDevices[16,0] := "1133,50691", aDevices[16,1] := "SpaceMouse Plus (XT) USB" ; same IDs for two devices
+aDevices[0,0] := 16 ; This needs to be set to "size of array".
 
 AHKHID_UseConstants()
 3dcIndexes := _3DCDevices()
