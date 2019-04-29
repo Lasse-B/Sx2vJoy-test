@@ -1,7 +1,7 @@
 TESTED WITH vJoy VERSION 2.1.6
 
 v1.2 build 5 test 13
-- added SpaceMouse Compact support (axes only)
+- added SpaceMouse Compact and SpaceMouse Enterprise support (axes only)
 
 v1.2 build 5 test 11
 - a couple of changes both to Sx2vJoy and the GUI to fix or at least help to track down the causes for crashes
