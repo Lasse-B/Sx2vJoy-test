@@ -10,7 +10,7 @@ Execution_Level=4
 Set_Version_Info=1
 File_Version=1.2.5.12
 Inc_File_Version=0
-Product_Version=1.1.22.9
+Product_Version=1.1.30.3
 Set_AHK_Version=1
 [ICONS]
 Icon_1=%In_Dir%\Sx2vJoy.ico
@@ -101,7 +101,8 @@ aDevices[13,0] := "1133,50694", aDevices[13,1] := "SpaceMouse Classic USB"
 aDevices[14,0] := "1133,50693", aDevices[14,1] := "CadMan"
 aDevices[15,0] := "1133,50691", aDevices[15,1] := "SpaceMouse Plus (XT) USB" ; same IDs for two devices
 aDevices[16,0] := "9583,50741", aDevices[16,1] := "SpaceMouse Compact"
-aDevices[0,0] := 16
+aDevices[17,0] := "9583,50739", aDevices[17,1] := "SpaceMouse Enterprise"
+aDevices[0,0] := 17
 
 AHKHID_UseConstants()
 3dcIndexes := _3DCDevices()
