@@ -8,7 +8,7 @@ Created_Date=1
 Execution_Level=4
 [VERSION]
 Set_Version_Info=1
-File_Version=1.2.5.11
+File_Version=1.2.5.12
 Inc_File_Version=0
 Product_Version=1.1.22.9
 Set_AHK_Version=1
@@ -54,7 +54,7 @@ loop, %0%
 if (param1 = "watchdog") and (param2 <> "") and (param3 <> "") and (param4 <> "") and (param5 <> "") and (param6 <> "")
    _watchdog(param2,param3,param4,param5,param6)
 
-version := "1.2 build 5 test 11"
+version := "1.2 build 5 test 13"
 
 Menu, Tray, nostandard
 Menu, Tray, add, Open Configuration GUI, gui
@@ -100,7 +100,8 @@ aDevices[12,0] := "1133,50721", aDevices[12,1] := "SpaceBall 5000 USB"
 aDevices[13,0] := "1133,50694", aDevices[13,1] := "SpaceMouse Classic USB"
 aDevices[14,0] := "1133,50693", aDevices[14,1] := "CadMan"
 aDevices[15,0] := "1133,50691", aDevices[15,1] := "SpaceMouse Plus (XT) USB" ; same IDs for two devices
-aDevices[0,0] := 15
+aDevices[16,0] := "9583,50741", aDevices[16,1] := "SpaceMouse Compact"
+aDevices[0,0] := 16
 
 AHKHID_UseConstants()
 3dcIndexes := _3DCDevices()
