@@ -22,8 +22,11 @@ v1.2 build 5 test 7
 v1.2 build 5 test 6
 - fixed crashes on Sx2vJoy startup on Win10
 - fixed Sx2vJoy causing vJoy error message spam in Event Viewer\Windows Logs\System\
-
-
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 3DConnexion's drivers and GUI are designed with professional CAD software in mind and don't work too well with games. As there is no GUI to fully customize 3DConnexion's joystick settings, you either have to manually change the configuration .XML files, or you can use Sx2vJoy and use your controller like you would any other joystick.
 
 Here's how you get started:
