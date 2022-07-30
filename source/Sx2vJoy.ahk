@@ -42,6 +42,7 @@ Icon_1=%In_Dir%\Sx2vJoy.ico
 ; Legendman - SpaceMouse Wireless
 ; MaraKan - SpacePilot Pro
 ; Shadys - SpaceMouse Plus (XT) USB
+; firereverie - SpaceMouse Pro Wireless (50737)
 
 #NoTrayIcon
 #singleinstance off
