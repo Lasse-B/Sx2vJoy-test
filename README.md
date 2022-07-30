@@ -1,3 +1,12 @@
+TESTED WITH vJoy VERSION 2.1.9.1
+
+v1.2 build 9 unofficial 1
+</br>
+Am noob, Credit to Lassie-B, for official distro visit https://github.com/Lasse-B/Sx2vJoy-test
+- added button support for SpaceMouse Pro Wireless (50737, though I expect 50738 is identical and could easily be added too)
+- aligned versioning to 1.2.9.1 across Sx2vJoy & Config GUI (am noob, pls halp)
+</br>
+
 TESTED WITH vJoy VERSION 2.1.6
 
 v1.2 build 5 test 13
@@ -9,15 +18,12 @@ v1.2 build 5 test 11
 v1.2 build 5 test 9
 - added SpaceNavigator for Notebooks support
 
-
 v1.2 build 5 test 8
 - fixed controller PID not being entered in the log when logging button IDs
-
 
 v1.2 build 5 test 7
 - fixed startup issues when using Russian, French and likely a couple other keyboard input locales
 - fixed error message when closing Sx2vJoy on controller and vJoy target device selection window
-
 
 v1.2 build 5 test 6
 - fixed crashes on Sx2vJoy startup on Win10
