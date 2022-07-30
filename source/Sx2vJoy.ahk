@@ -8,7 +8,7 @@ Created_Date=1
 Execution_Level=4
 [VERSION]
 Set_Version_Info=1
-File_Version=1.2.5.13
+File_Version=1.2.9.1
 Inc_File_Version=0
 Product_Version=1.1.30.3
 Set_AHK_Version=1
@@ -55,7 +55,7 @@ loop, %0%
 if (param1 = "watchdog") and (param2 <> "") and (param3 <> "") and (param4 <> "") and (param5 <> "") and (param6 <> "")
    _watchdog(param2,param3,param4,param5,param6)
 
-version := "1.2 build 5 test 13"
+version := "1.2 build 9 unofficial 1"
 
 Menu, Tray, nostandard
 Menu, Tray, add, Open Configuration GUI, gui

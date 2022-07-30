@@ -21,7 +21,7 @@
 _GDIPlus_Startup()
 
 Global $inisection = "default"
-Global $version = "v1.2 build 7"
+Global $version = "v1.2 build 9 unofficial 1"
 
 $Form1 = GUICreate("Sx2vJoy Config GUI " & $version, 738, 758)
 $width = 130
@@ -57,7 +57,7 @@ Global $aMarqueeAxs = ""
 
 Dim $aButtonIDs2[0][2]
 
-Dim $aDeviceButtons[9][4] = [["SpaceBall 5000 (USB)", 12, "0,1,2,3,4,5,6,7,8,9,10,11", "1,2,3,4,5,6,7,8,9,A,B,C"], ["SpaceExplorer", 15, "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14", "1,2,T,L,R,F,ESC,ALT,SHIFT,CTRL,FIT,PANEL,+,-,2D"], ["SpaceMouse Plus (XT) USB", 11, "0,1,2,3,4,5,6,7,8,9,10", "1,2,3,4,5,6,7,8,*,Left,Right"], ["SpaceMouse Pro", 15, "0,1,2,4,5,8,12,13,14,15,22,23,24,25,26", "MENU,FIT,T,R,F,ROL,1,2,3,4,ESC,ALT,SHIFT,CTRL,ROT"], ["SpaceMouse Pro Wireless", 15, "0,1,2,4,5,8,12,13,14,15,22,23,24,25,26", "MENU,FIT,T,R,F,ROL,1,2,3,4,ESC,ALT,SHIFT,CTRL,ROT"], ["SpaceMouse Wireless", 2, "0,1", "Left, Right"], ["SpaceNavigator", 2, "0,1", "Left,Right"], ["SpaceNavigator for Notebooks", 2, "0,1", "Left,Right"], ["SpacePilot", 21, "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20", "1,2,3,4,5,6,T,L,R,F,ESC,ALT,SHIFT,CTRL,FIT,PANEL,VOL+,VOL-,DOM,3D,CONFIG"], ["SpacePilot Pro", 21, "0,1,2,4,5,8,10,12,13,14,15,16,22,23,24,25,26,27,28,29,30", "MENU,FIT,T,R,F,ROL,ISO,1,2,3,4,5,ESC,ALT,SHIFT,CTRL,PAN/ZOOM,ROT,DOM,+,-"]]
+Dim $aDeviceButtons[10][4] = [["SpaceBall 5000 (USB)", 12, "0,1,2,3,4,5,6,7,8,9,10,11", "1,2,3,4,5,6,7,8,9,A,B,C"], ["SpaceExplorer", 15, "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14", "1,2,T,L,R,F,ESC,ALT,SHIFT,CTRL,FIT,PANEL,+,-,2D"], ["SpaceMouse Plus (XT) USB", 11, "0,1,2,3,4,5,6,7,8,9,10", "1,2,3,4,5,6,7,8,*,Left,Right"], ["SpaceMouse Pro", 15, "0,1,2,4,5,8,12,13,14,15,22,23,24,25,26", "MENU,FIT,T,R,F,ROL,1,2,3,4,ESC,ALT,SHIFT,CTRL,ROT"], ["SpaceMouse Pro Wireless", 15, "0,1,2,4,5,8,12,13,14,15,22,23,24,25,26", "MENU,FIT,T,R,F,ROL,1,2,3,4,ESC,ALT,SHIFT,CTRL,ROT"], ["SpaceMouse Wireless", 2, "0,1", "Left, Right"], ["SpaceNavigator", 2, "0,1", "Left,Right"], ["SpaceNavigator for Notebooks", 2, "0,1", "Left,Right"], ["SpacePilot", 21, "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20", "1,2,3,4,5,6,T,L,R,F,ESC,ALT,SHIFT,CTRL,FIT,PANEL,VOL+,VOL-,DOM,3D,CONFIG"], ["SpacePilot Pro", 21, "0,1,2,4,5,8,10,12,13,14,15,16,22,23,24,25,26,27,28,29,30", "MENU,FIT,T,R,F,ROL,ISO,1,2,3,4,5,ESC,ALT,SHIFT,CTRL,PAN/ZOOM,ROT,DOM,+,-"]]
 
 Global $swapRotTrans = 0
 
