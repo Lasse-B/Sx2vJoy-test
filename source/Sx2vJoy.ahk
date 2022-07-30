@@ -8,7 +8,7 @@ Created_Date=1
 Execution_Level=4
 [VERSION]
 Set_Version_Info=1
-File_Version=1.2.5.12
+File_Version=1.2.5.13
 Inc_File_Version=0
 Product_Version=1.1.30.3
 Set_AHK_Version=1
@@ -363,16 +363,17 @@ InputMsg9583(wParam, lParam) {
 _buttonsPerPID(PID, byte0) {
    global buttonlog, vJoyButtons, vjoy_id, btnsSN, btnsSM, btnsSE, btnsSB, btnsSP, btnsSMW, btnsSPP, btnsSMP, btnsSNN
    
-   (PID = 50691) ? pointer := "btnsSMP" ; SpaceMouse Plus (XT) USB
-   (PID = 50721) ? pointer := "btnsSB"  ; SpaceBall 5000 (USB)
-   (PID = 50725) ? pointer := "btnsSP"  ; SpacePilot (non-Pro)
-   (PID = 50726) ? pointer := "btnsSN"  ; SpaceNavigator
-   (PID = 50727) ? pointer := "btnsSE"  ; SpaceExplorer
-   (PID = 50728) ? pointer := "btnsSNN" ; SpaceNavigator for Notebooks
-   (PID = 50729) ? pointer := "btnsSPP" ; SpacePilot Pro
-   (PID = 50731) ? pointer := "btnsSM"  ; SpaceMouse Pro
-   (PID = 50734) ? pointer := "btnsSMW" ; SpaceMouse Wireless
-   (PID = 50735) ? pointer := "btnsSMW" ; SpaceMouse Wireless
+   (PID = 50691) ? pointer := "btnsSMP"  ; SpaceMouse Plus (XT) USB
+   (PID = 50721) ? pointer := "btnsSB"   ; SpaceBall 5000 (USB)
+   (PID = 50725) ? pointer := "btnsSP"   ; SpacePilot (non-Pro)
+   (PID = 50726) ? pointer := "btnsSN"   ; SpaceNavigator
+   (PID = 50727) ? pointer := "btnsSE"   ; SpaceExplorer
+   (PID = 50728) ? pointer := "btnsSNN"  ; SpaceNavigator for Notebooks
+   (PID = 50729) ? pointer := "btnsSPP"  ; SpacePilot Pro
+   (PID = 50731) ? pointer := "btnsSM"   ; SpaceMouse Pro
+   (PID = 50737) ? pointer := "btnsSMPW" ; SpaceMouse Pro Wireless
+   (PID = 50734) ? pointer := "btnsSMW"  ; SpaceMouse Wireless
+   (PID = 50735) ? pointer := "btnsSMW"  ; SpaceMouse Wireless
    
    ;printarray(%pointer%)
    
@@ -457,7 +458,7 @@ _getRAWdevices() {
 }
 
 Kbd_SetBtn(state,pointer,index) {
-   global btnsSN, btnsSM, btnsSE, btnsSB, btnsSP, btnsSMW, btnsSPP, btnsSMP, btnsSNN
+   global btnsSN, btnsSM, btnsSE, btnsSB, btnsSP, btnsSMW, btnsSPP, btnsSMP, btnsSNN, btnsSMPW
 
    down := %pointer%[index,2]
    up := %pointer%[index,3]
@@ -698,7 +699,7 @@ _readAxesOrder(profile) {
 }
 
 _readBtnConfig(profile) {
-   global btnsSB, btnsSE, btnsSM, btnsSN, btnsSP, btnsSMW, btnsSPP, btnsSMP, btnsSNN
+   global btnsSB, btnsSE, btnsSM, btnsSN, btnsSP, btnsSMW, btnsSPP, btnsSMP, btnsSNN, btnsSMPW
    btnsSB := _BtnConfig2Array(profile, "SpaceBall 5000 (USB)")
    btnsSE := _BtnConfig2Array(profile, "SpaceExplorer")
    btnsSM := _BtnConfig2Array(profile, "SpaceMouse Pro")
@@ -708,6 +709,7 @@ _readBtnConfig(profile) {
    btnsSMW := _BtnConfig2Array(profile, "SpaceMouse Wireless")
    btnsSPP := _BtnConfig2Array(profile, "SpacePilot Pro")
    btnsSMP := _BtnConfig2Array(profile, "SpaceMouse Plus (XT) USB")
+   btnsSMPW := _BtnConfig2Array(profile, "SpaceMouse Pro Wireless")
    ;printarray(btnsSMP) ; comment out
 }
 
